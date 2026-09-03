@@ -3,12 +3,17 @@
   "private": true,
   "scripts": {
     "start": "pnpm --filter @resolume-discord-rpc/desktop start",
+    "dev": "pnpm --filter @resolume-discord-rpc/desktop start",
     "generate-icons": "pnpm --filter @resolume-discord-rpc/desktop generate-icons",
     "test": "pnpm -r test",
+    "lint": "eslint .",
     "build": "pnpm --filter @resolume-discord-rpc/desktop build"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^26.4.1",
-    "typescript": "^7.0.2"
+    "eslint": "^10.9.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0"
   }
 }

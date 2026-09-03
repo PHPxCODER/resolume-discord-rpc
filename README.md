@@ -1,7 +1,7 @@
 # Resolume Discord RPC
 
-Shows "In Resolume Arena" as your Discord Rich Presence activity while
-Resolume Arena is running. Inspired by
+Shows "In Resolume Arena/Avenue/Wire" as your Discord Rich Presence
+activity while one of them is running. Inspired by
 [adobe-discord-rpc](https://github.com/teeteeteeteetee/adobe-discord-rpc).
 
 > **Status:** early development — no builds published yet.
@@ -26,9 +26,11 @@ to quit.
 
 ## Scope
 
-- Detects **Resolume Arena** only (not Avenue or Wire).
-- Shows a static "In Resolume Arena" presence with elapsed time — no
-  composition/clip/layer detail yet (Resolume's REST API could add this
+- Detects **Resolume Arena, Avenue, and Wire**. Avenue/Wire detection is
+  unverified against a real install — please open an issue if it doesn't
+  pick up your process.
+- Shows a static "In Resolume &lt;product&gt;" presence with elapsed time —
+  no composition/clip/layer detail yet (Resolume's REST API could add this
   in a future version).
 - Windows and macOS only.
 

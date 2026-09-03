@@ -2,18 +2,15 @@ import { Client } from '@xhayper/discord-rpc';
 
 export const RECONNECT_DELAY_MS = 15000;
 
-export interface ActivityPayload {
+export interface ActivityDetails {
   details: string;
-  largeImageKey: string;
   largeImageText: string;
-  startTimestamp?: Date;
+  largeImageKey: string;
 }
 
-export const ACTIVITY_DEFAULTS: Omit<ActivityPayload, 'startTimestamp'> = {
-  details: 'In Resolume Arena',
-  largeImageKey: 'resolume_logo',
-  largeImageText: 'Resolume Arena',
-};
+export interface ActivityPayload extends ActivityDetails {
+  startTimestamp?: Date;
+}
 
 export interface DiscordRpcClientUser {
   setActivity(activity: ActivityPayload): Promise<unknown>;
@@ -45,6 +42,7 @@ export class Presence {
   status: PresenceStatus;
   wantsActivity: boolean;
   activityStartedAt: Date | null;
+  activityDetails: ActivityDetails | null;
   private _reconnectTimer: ReturnType<typeof setTimeout> | null;
 
   constructor({ clientId, createClient }: PresenceOptions) {
@@ -54,6 +52,7 @@ export class Presence {
     this.status = 'disconnected';
     this.wantsActivity = false;
     this.activityStartedAt = null;
+    this.activityDetails = null;
     this._reconnectTimer = null;
   }
 
@@ -85,8 +84,22 @@ export class Presence {
     }, RECONNECT_DELAY_MS);
   }
 
-  showActivity(startedAt: Date = new Date()): void {
+  reconnect(): void {
+    if (this._reconnectTimer) {
+      clearTimeout(this._reconnectTimer);
+      this._reconnectTimer = null;
+    }
+    if (this.client) {
+      this.client.destroy().catch(() => {});
+      this.client = null;
+    }
+    this.status = 'disconnected';
+    this.connect();
+  }
+
+  showActivity(activity: ActivityDetails, startedAt: Date = new Date()): void {
     this.wantsActivity = true;
+    this.activityDetails = activity;
     if (!this.activityStartedAt) this.activityStartedAt = startedAt;
     if (this.status === 'connected') this._applyActivity();
     else if (this.status === 'disconnected') this.connect();
@@ -95,15 +108,19 @@ export class Presence {
   clearActivity(): void {
     this.wantsActivity = false;
     this.activityStartedAt = null;
+    this.activityDetails = null;
     if (this.status === 'connected' && this.client) {
       this.client.user.clearActivity().catch(() => {});
     }
   }
 
   private _applyActivity(): void {
-    if (!this.client) return;
+    if (!this.client || !this.activityDetails) return;
     this.client.user
-      .setActivity({ ...ACTIVITY_DEFAULTS, startTimestamp: this.activityStartedAt ?? undefined })
+      .setActivity({
+        ...this.activityDetails,
+        startTimestamp: this.activityStartedAt ?? undefined,
+      })
       .catch(() => {});
   }
 

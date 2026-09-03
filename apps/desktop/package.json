@@ -6,6 +6,7 @@
   "scripts": {
     "build:ts": "pnpm --filter @resolume-discord-rpc/core build && tsc",
     "start": "pnpm build:ts && electron .",
+    "dev": "pnpm start",
     "generate-icons": "pnpm build:ts && node out/scripts/generate-icons.js",
     "build": "pnpm build:ts && electron-builder"
   },

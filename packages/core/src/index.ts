@@ -1,7 +1,8 @@
-export { Detector, parseWindowsTasklist, parseUnixPgrep, COMMANDS } from './detector';
-export type { Platform, RunCommand, DetectorOptions } from './detector';
-export { Presence, ACTIVITY_DEFAULTS, RECONNECT_DELAY_MS } from './presence';
+export { Detector, parseWindowsTasklist, parseUnixPgrep, COMMANDS, RESOLUME_PRODUCTS } from './detector';
+export type { Platform, RunCommand, DetectorOptions, ResolumeProductId, ResolumeProduct } from './detector';
+export { Presence, RECONNECT_DELAY_MS } from './presence';
 export type {
+  ActivityDetails,
   ActivityPayload,
   DiscordRpcClient,
   DiscordRpcClientUser,

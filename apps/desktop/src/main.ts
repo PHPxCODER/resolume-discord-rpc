@@ -1,10 +1,20 @@
 import { app, Tray, Menu, nativeImage } from 'electron';
 import path from 'node:path';
-import { Detector, Presence } from '@resolume-discord-rpc/core';
+import {
+  Detector,
+  Presence,
+  RESOLUME_PRODUCTS,
+  type ResolumeProductId,
+  type ResolumeProduct,
+} from '@resolume-discord-rpc/core';
 import { DISCORD_CLIENT_ID } from './constants';
 import { isAutoStartEnabled, setAutoStart, applyStoredAutoStartSetting } from './autostart';
 
 app.setName('Resolume Discord RPC');
+
+const PRODUCTS_BY_ID: Record<ResolumeProductId, ResolumeProduct> = Object.fromEntries(
+  RESOLUME_PRODUCTS.map((product) => [product.id, product])
+) as Record<ResolumeProductId, ResolumeProduct>;
 
 let tray: Tray | null = null;
 const detector = new Detector();
@@ -21,6 +31,8 @@ function setTrayState(label: string): void {
     Menu.buildFromTemplate([
       { label, enabled: false },
       { type: 'separator' },
+      { label: 'Reconnect to Discord', click: () => presence.reconnect() },
+      { type: 'separator' },
       {
         label: 'Start with system',
         type: 'checkbox',
@@ -35,19 +47,20 @@ function setTrayState(label: string): void {
 
 function createTray(): void {
   tray = new Tray(nativeImage.createFromPath(assetPath('tray-idle.png')));
-  setTrayState('Waiting for Resolume Arena…');
+  setTrayState('Waiting for Resolume…');
 }
 
-detector.on('detected', () => {
-  presence.showActivity();
+detector.on('detected', (productId) => {
+  const { label, largeImageKey } = PRODUCTS_BY_ID[productId];
+  presence.showActivity({ details: `In ${label}`, largeImageText: label, largeImageKey });
   tray?.setImage(nativeImage.createFromPath(assetPath('tray-connected.png')));
-  setTrayState('Connected — In Resolume Arena');
+  setTrayState(`Connected — In ${label}`);
 });
 
 detector.on('lost', () => {
   presence.clearActivity();
   tray?.setImage(nativeImage.createFromPath(assetPath('tray-idle.png')));
-  setTrayState('Waiting for Resolume Arena…');
+  setTrayState('Waiting for Resolume…');
 });
 
 app.whenReady().then(() => {
