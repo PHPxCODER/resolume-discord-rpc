@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { Detector, parseWindowsTasklist, parseUnixPgrep } from '../src/detector.js';
+import { Detector, parseWindowsTasklist, parseUnixPgrep } from '../src/detector';
 
 describe('parseWindowsTasklist', () => {
   it('returns true when Arena.exe is in the tasklist output', () => {

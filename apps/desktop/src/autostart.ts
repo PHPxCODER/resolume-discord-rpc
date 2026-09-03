@@ -1,12 +1,16 @@
-const { app } = require('electron');
-const fs = require('node:fs');
-const path = require('node:path');
+import { app } from 'electron';
+import fs from 'node:fs';
+import path from 'node:path';
 
-function configPath() {
+interface AutoStartConfig {
+  autoStart: boolean;
+}
+
+export function configPath(): string {
   return path.join(app.getPath('userData'), 'config.json');
 }
 
-function loadConfig() {
+function loadConfig(): AutoStartConfig {
   try {
     return JSON.parse(fs.readFileSync(configPath(), 'utf8'));
   } catch {
@@ -14,23 +18,21 @@ function loadConfig() {
   }
 }
 
-function saveConfig(config) {
+function saveConfig(config: AutoStartConfig): void {
   fs.writeFileSync(configPath(), JSON.stringify(config, null, 2));
 }
 
-function isAutoStartEnabled() {
+export function isAutoStartEnabled(): boolean {
   return loadConfig().autoStart === true;
 }
 
-function setAutoStart(enabled) {
+export function setAutoStart(enabled: boolean): void {
   app.setLoginItemSettings({ openAtLogin: enabled });
   saveConfig({ autoStart: enabled });
 }
 
-function applyStoredAutoStartSetting() {
+export function applyStoredAutoStartSetting(): boolean {
   const enabled = isAutoStartEnabled();
   app.setLoginItemSettings({ openAtLogin: enabled });
   return enabled;
 }
-
-module.exports = { isAutoStartEnabled, setAutoStart, applyStoredAutoStartSetting, configPath };

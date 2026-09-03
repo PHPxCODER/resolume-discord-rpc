@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { Presence, ACTIVITY_DEFAULTS, RECONNECT_DELAY_MS } from '../src/presence.js';
+import { Presence, ACTIVITY_DEFAULTS, RECONNECT_DELAY_MS, type DiscordRpcClient } from '../src/presence';
 
-function createFakeClient({ shouldFailLogin = false } = {}) {
-  const listeners = {};
+function createFakeClient({ shouldFailLogin = false } = {}): DiscordRpcClient {
+  const listeners: Record<string, () => void> = {};
   const setActivity = vi.fn().mockResolvedValue({});
   const clearActivity = vi.fn().mockResolvedValue(undefined);
   const destroy = vi.fn().mockResolvedValue(undefined);
@@ -18,7 +18,7 @@ function createFakeClient({ shouldFailLogin = false } = {}) {
     }),
     destroy,
     user: { setActivity, clearActivity },
-  };
+  } as unknown as DiscordRpcClient;
 }
 
 describe('Presence', () => {

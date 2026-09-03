@@ -1,35 +1,55 @@
-const { EventEmitter } = require('node:events');
-const { exec } = require('node:child_process');
-const util = require('node:util');
+import { EventEmitter } from 'node:events';
+import { exec } from 'node:child_process';
+import util from 'node:util';
 
 const execAsync = util.promisify(exec);
 
-const COMMANDS = {
+export type Platform = 'win32' | 'darwin' | string;
+
+export const COMMANDS: Record<string, string> = {
   win32: 'tasklist /FI "IMAGENAME eq Arena.exe" /NH',
   darwin: 'pgrep -x Arena',
 };
 
-function parseWindowsTasklist(output) {
+export function parseWindowsTasklist(output: string): boolean {
   return /arena\.exe/i.test(output) && !/no tasks/i.test(output);
 }
 
-function parseUnixPgrep(output) {
+export function parseUnixPgrep(output: string): boolean {
   return output.trim().length > 0;
 }
 
-async function defaultRunCommand(command) {
+export type RunCommand = (command: string) => Promise<string>;
+
+async function defaultRunCommand(command: string): Promise<string> {
   try {
     const { stdout } = await execAsync(command);
     return stdout;
   } catch (err) {
     // Commands like `pgrep` exit non-zero when there's no match; Node still
     // attaches stdout to the rejected error, so treat that as "not running".
-    return err.stdout || '';
+    return (err as { stdout?: string }).stdout || '';
   }
 }
 
-class Detector extends EventEmitter {
-  constructor({ platform = process.platform, pollIntervalMs = 10000, runCommand = defaultRunCommand } = {}) {
+export interface DetectorOptions {
+  platform?: Platform;
+  pollIntervalMs?: number;
+  runCommand?: RunCommand;
+}
+
+export class Detector extends EventEmitter {
+  platform: Platform;
+  pollIntervalMs: number;
+  runCommand: RunCommand;
+  isRunning: boolean;
+  private _timer: ReturnType<typeof setInterval> | null;
+
+  constructor({
+    platform = process.platform,
+    pollIntervalMs = 10000,
+    runCommand = defaultRunCommand,
+  }: DetectorOptions = {}) {
     super();
     this.platform = platform;
     this.pollIntervalMs = pollIntervalMs;
@@ -38,7 +58,7 @@ class Detector extends EventEmitter {
     this._timer = null;
   }
 
-  async poll() {
+  async poll(): Promise<void> {
     const command = COMMANDS[this.platform];
     if (!command) throw new Error(`Unsupported platform: ${this.platform}`);
 
@@ -54,16 +74,14 @@ class Detector extends EventEmitter {
     }
   }
 
-  start() {
+  start(): void {
     if (this._timer) return;
     this.poll();
     this._timer = setInterval(() => this.poll(), this.pollIntervalMs);
   }
 
-  stop() {
-    clearInterval(this._timer);
+  stop(): void {
+    if (this._timer) clearInterval(this._timer);
     this._timer = null;
   }
 }
-
-module.exports = { Detector, parseWindowsTasklist, parseUnixPgrep, COMMANDS };

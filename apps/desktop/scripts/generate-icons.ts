@@ -1,8 +1,14 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const { PNG } = require('pngjs');
+import fs from 'node:fs';
+import path from 'node:path';
+import { PNG } from 'pngjs';
 
-const ICONS = [
+interface IconSpec {
+  filename: string;
+  size: number;
+  color: [number, number, number, number];
+}
+
+const ICONS: IconSpec[] = [
   { filename: 'tray-idle.png', size: 16, color: [148, 148, 148, 255] },
   { filename: 'tray-connected.png', size: 16, color: [88, 101, 242, 255] },
   { filename: 'app-icon.png', size: 1024, color: [88, 101, 242, 255] },
@@ -22,6 +28,6 @@ for (const { filename, size, color } of ICONS) {
     }
   }
 
-  const outPath = path.join(__dirname, '..', 'assets', filename);
+  const outPath = path.join(__dirname, '..', '..', 'assets', filename);
   png.pack().pipe(fs.createWriteStream(outPath));
 }

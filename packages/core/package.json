@@ -2,8 +2,10 @@
   "name": "@resolume-discord-rpc/core",
   "version": "0.0.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "out/index.js",
+  "types": "out/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "vitest run"
   },
   "dependencies": {
