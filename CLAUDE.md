@@ -24,3 +24,12 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-04: Wired `CompositionWatcher` into `apps/desktop/src/main.ts` so
+  live composition/layer/BPM data reaches the Discord presence `state` field
+  (Task 3 of resolume-rest-api plan).
+- 2026-09-04: Added optional `state` field to `ActivityDetails` and exported
+  `CompositionWatcher` from `@resolume-discord-rpc/core` (Task 2 of
+  resolume-rest-api plan).
+- 2026-09-04: Added `CompositionWatcher`, which polls Resolume's REST API for
+  composition/layer/BPM data (Task 1 of resolume-rest-api plan).
+

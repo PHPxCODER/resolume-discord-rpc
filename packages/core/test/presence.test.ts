@@ -49,6 +49,17 @@ describe('Presence', () => {
     expect(presence.status).toBe('connected');
   });
 
+  it('passes the optional state field through to setActivity when present', () => {
+    const fakeClient = createFakeClient();
+    const presence = new Presence({ clientId: 'abc', createClient: () => fakeClient });
+
+    presence.showActivity({ ...ARENA_ACTIVITY, state: 'MyShow · 128 BPM' });
+
+    expect(fakeClient.user.setActivity).toHaveBeenCalledWith(
+      expect.objectContaining({ state: 'MyShow · 128 BPM' })
+    );
+  });
+
   it('applies the new activity in place when called again with a different product, without re-logging in', () => {
     const fakeClient = createFakeClient();
     const presence = new Presence({ clientId: 'abc', createClient: () => fakeClient });

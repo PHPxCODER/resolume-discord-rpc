@@ -6,6 +6,7 @@ export interface ActivityDetails {
   details: string;
   largeImageText: string;
   largeImageKey: string;
+  state?: string;
 }
 
 export interface ActivityPayload extends ActivityDetails {

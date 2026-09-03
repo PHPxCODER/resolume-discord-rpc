@@ -9,3 +9,5 @@ export type {
   PresenceStatus,
   PresenceOptions,
 } from './presence';
+export { CompositionWatcher } from './composition-watcher';
+export type { CompositionUpdate, CompositionWatcherOptions, FetchImpl } from './composition-watcher';
