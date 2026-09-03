@@ -32,15 +32,26 @@ to quit.
   in a future version).
 - Windows and macOS only.
 
+## Project structure
+
+A pnpm workspace with two packages:
+
+- `packages/core` — framework-agnostic Resolume process detection and
+  Discord presence logic (unit tested).
+- `apps/desktop` — the Electron tray app.
+
 ## Development
 
 ```bash
-npm install
-npm run generate-icons
-npm start
+pnpm install
+pnpm generate-icons
+pnpm start
 ```
 
-Run tests with `npm test`.
+Run tests with `pnpm test`. See
+`docs/superpowers/specs/2026-09-03-resolume-discord-rpc-design.md` and
+`docs/superpowers/plans/2026-09-03-resolume-discord-rpc-v1.md` for the full
+design and implementation plan.
 
 ## License
 
