@@ -1,0 +1,35 @@
+{
+  "name": "@resolume-discord-rpc/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "generate-icons": "node scripts/generate-icons.js",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "@resolume-discord-rpc/core": "workspace:*"
+  },
+  "devDependencies": {
+    "electron": "^44.1.1",
+    "electron-builder": "^26.15.3",
+    "pngjs": "^7.0.0"
+  },
+  "build": {
+    "appId": "com.resolume-discord-rpc.app",
+    "productName": "Resolume Discord RPC",
+    "asar": false,
+    "files": ["src/**/*", "assets/**/*", "package.json", "node_modules/**/*"],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/app-icon.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/app-icon.png",
+      "category": "public.app-category.utilities"
+    },
+    "publish": null
+  }
+}
