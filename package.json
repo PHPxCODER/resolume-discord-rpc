@@ -1,0 +1,10 @@
+{
+  "name": "resolume-discord-rpc",
+  "private": true,
+  "scripts": {
+    "start": "pnpm --filter @resolume-discord-rpc/desktop start",
+    "generate-icons": "pnpm --filter @resolume-discord-rpc/desktop generate-icons",
+    "test": "pnpm -r test",
+    "build": "pnpm --filter @resolume-discord-rpc/desktop build"
+  }
+}
