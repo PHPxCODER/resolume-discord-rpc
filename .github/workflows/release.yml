@@ -42,6 +42,12 @@ jobs:
       - name: Build (signs/notarizes when certificate secrets exist)
         shell: bash
         run: |
+          # Unconfigured secrets arrive as empty strings, and electron-builder
+          # treats an empty CSC_LINK as a certificate path (resolving to the
+          # project dir → "not a file"). Drop empties so no-secrets builds
+          # are genuinely unsigned.
+          [ -n "$CSC_LINK" ] || unset CSC_LINK CSC_KEY_PASSWORD
+          [ -n "$APPLE_ID" ] || unset APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID
           VERSION="${GITHUB_REF_NAME#v}"
           ARGS="--config.extraMetadata.version=$VERSION --config.extraMetadata.main=bundle/main.js"
           if [ "$RUNNER_OS" = "macOS" ] && [ -n "$APPLE_ID" ]; then

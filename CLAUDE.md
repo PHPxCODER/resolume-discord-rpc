@@ -24,6 +24,10 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Fixed the real release-build killer: unconfigured GitHub
+  secrets arrive as empty strings and electron-builder treats empty
+  CSC_LINK as a cert path (→ "not a file"); the workflow now unsets empty
+  signing vars. Reproduced and verified locally with CSC_LINK="".
 - 2026-09-08: Fixed the v1.0.0 release build failing on both platforms —
   pnpm's script-arg forwarding inserts a stray `--` that made
   electron-builder read the config flags as a file path; the workflow now
