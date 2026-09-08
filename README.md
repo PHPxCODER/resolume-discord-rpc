@@ -4,12 +4,10 @@ Shows "In Resolume Arena/Avenue/Wire" as your Discord Rich Presence
 activity while one of them is running. Inspired by
 [adobe-discord-rpc](https://github.com/teeteeteeteetee/adobe-discord-rpc).
 
-> **Status:** early development — no builds published yet.
-
 ## Install
 
-Once builds are published, download the latest release for your OS from
-the [Releases page](../../releases) — don't clone this repo and run it
+Download the latest release for your OS from the
+[Releases page](../../releases) — don't clone this repo and run it
 from source unless you're developing on it (see Development below).
 
 - **Windows:** run the installer. Windows SmartScreen may warn that this

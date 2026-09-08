@@ -24,6 +24,8 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-09: v1.0.0 published on GitHub Releases; dropped the README's
+  "no builds published yet" status line and its stale Install wording.
 - 2026-09-08: Granted the release workflow `contents: write` (+
   `actions: read` for the CI gate) — the default read-only token made
   draft-release creation fail with "Resource not accessible by
