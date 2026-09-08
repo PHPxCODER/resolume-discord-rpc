@@ -6,7 +6,38 @@ on:
       - 'v*'
 
 jobs:
+  # A tag push doesn't trigger the CI workflow itself, so gate the release
+  # on the CI run of the commit being tagged: wait for it to complete and
+  # refuse to build if it didn't succeed (or never ran).
+  wait-for-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for CI on this commit to pass
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Waiting for the CI workflow on $GITHUB_SHA…"
+          for attempt in $(seq 1 80); do
+            RUN=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$GITHUB_SHA&per_page=1" \
+              --jq '.workflow_runs[0] | "\(.status) \(.conclusion)"' 2>/dev/null || echo "")
+            STATUS="${RUN%% *}"
+            CONCLUSION="${RUN##* }"
+            if [ "$STATUS" = "completed" ]; then
+              if [ "$CONCLUSION" = "success" ]; then
+                echo "CI passed — releasing."
+                exit 0
+              fi
+              echo "CI concluded with '$CONCLUSION' — refusing to release."
+              exit 1
+            fi
+            echo "attempt $attempt/80: CI status '${STATUS:-not started yet}', retrying in 15s…"
+            sleep 15
+          done
+          echo "Timed out waiting for CI after 20 minutes."
+          exit 1
+
   build:
+    needs: wait-for-ci
     strategy:
       matrix:
         include:

@@ -24,6 +24,9 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Release workflow now waits for the tagged commit's CI run to
+  succeed before building (polls via gh api, fails closed after 20 min or
+  on CI failure).
 - 2026-09-08: Fixed the real release-build killer: unconfigured GitHub
   secrets arrive as empty strings and electron-builder treats empty
   CSC_LINK as a cert path (→ "not a file"); the workflow now unsets empty
