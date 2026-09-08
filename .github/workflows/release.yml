@@ -36,12 +36,16 @@ jobs:
       # skips signing when it isn't; notarization is only requested when
       # Apple credentials exist. With no secrets configured this step
       # builds unsigned artifacts exactly like before.
+      # The app version comes from the tag (v1.2.3 → 1.2.3) so releases
+      # never need a version-bump commit; extraMetadata.main is repeated
+      # here so the CLI override can't clobber the packaged entrypoint.
       - name: Build (signs/notarizes when certificate secrets exist)
         shell: bash
         run: |
-          ARGS=""
+          VERSION="${GITHUB_REF_NAME#v}"
+          ARGS="--config.extraMetadata.version=$VERSION --config.extraMetadata.main=bundle/main.js"
           if [ "$RUNNER_OS" = "macOS" ] && [ -n "$APPLE_ID" ]; then
-            ARGS="--config.mac.notarize=true"
+            ARGS="$ARGS --config.mac.notarize=true"
           fi
           pnpm --filter @resolume-discord-rpc/desktop build -- $ARGS
         env:

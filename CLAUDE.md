@@ -24,6 +24,11 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Release builds now derive their version from the pushed git
+  tag (`v1.2.3` → `--config.extraMetadata.version=1.2.3`), so releases
+  need no version-bump commit; package.json versions stay at 0.0.0.
+  Verified locally that the CLI override preserves `extraMetadata.main`.
+  Released v1.0.0 this way (first tagged release).
 - 2026-09-08: Release workflow now uploads updater metadata
   (latest*.yml, blockmaps, mac zip) and passes signing/notarization
   secrets through — dormant until certificates exist; added `packaging/`
