@@ -60,6 +60,18 @@ describe('Presence', () => {
     );
   });
 
+  it('passes activity buttons through to setActivity when present', () => {
+    const fakeClient = createFakeClient();
+    const presence = new Presence({ clientId: 'abc', createClient: () => fakeClient });
+    const buttons = [
+      { label: 'What is Resolume?', url: 'https://resolume.com/software/avenue-arena' },
+    ];
+
+    presence.showActivity({ ...ARENA_ACTIVITY, buttons });
+
+    expect(fakeClient.user.setActivity).toHaveBeenCalledWith(expect.objectContaining({ buttons }));
+  });
+
   it('applies the new activity in place when called again with a different product, without re-logging in', () => {
     const fakeClient = createFakeClient();
     const presence = new Presence({ clientId: 'abc', createClient: () => fakeClient });

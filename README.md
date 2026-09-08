@@ -21,18 +21,43 @@ from source unless you're developing on it (see Development below).
   then confirm in the dialog that appears.
 
 Once running, look for the tray icon (system tray on Windows, menu bar on
-macOS). Right-click it (click on macOS) to enable "Start with system" or
-to quit.
+macOS). Right-click it (click on macOS) for "Start with system", the
+"Show live details in Discord" privacy toggle, logs, and quit.
 
 ## Scope
 
-- Detects **Resolume Arena, Avenue, and Wire**. Avenue/Wire detection is
-  unverified against a real install — please open an issue if it doesn't
-  pick up your process.
-- Shows a static "In Resolume &lt;product&gt;" presence with elapsed time —
-  no composition/clip/layer detail yet (Resolume's REST API could add this
-  in a future version).
+- Detects **Resolume Arena, Avenue, and Wire** and shows an
+  "In Resolume &lt;product&gt;" presence with elapsed time.
+- With Resolume's Webserver enabled (Preferences → Webserver), the
+  presence also shows **live details**:
+  - Arena/Avenue: composition name, selected layer, the topmost playing
+    clip, and BPM — updated within seconds via Resolume's WebSocket, with
+    polling as fallback.
+  - Wire: "Editing: &lt;patch name&gt;" (once the patch has been saved).
+  - Turn this off any time with the "Show live details in Discord" tray
+    toggle if you'd rather not broadcast composition/patch names.
+- The presence carries "What is Resolume?" / "View on GitHub" buttons.
+  Discord only shows activity buttons to *other* users — you won't see
+  them on your own profile.
 - Windows and macOS only.
+
+## Configuration
+
+Everything works with zero configuration. A `config.json` in the app's
+user-data directory (`%APPDATA%/Resolume Discord RPC/` on Windows,
+`~/Library/Application Support/Resolume Discord RPC/` on macOS) stores:
+
+- `autoStart` — mirror of the "Start with system" tray toggle.
+- `showLiveDetails` — mirror of the "Show live details in Discord" toggle.
+- `restPort` (default `8080`) / `wireRestPort` (default `8081`) — only
+  needed if you changed Resolume's own webserver port. Edit the file and
+  restart the app.
+
+## Troubleshooting
+
+Use the tray's "Open logs" item — the app logs detection, Discord
+reconnects, and live-details availability transitions to
+`logs/app.log` in the user-data directory.
 
 ## Project structure
 

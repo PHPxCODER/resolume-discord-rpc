@@ -23,6 +23,7 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm test
       - run: pnpm generate-icons
       - run: pnpm build
       - uses: softprops/action-gh-release@v2

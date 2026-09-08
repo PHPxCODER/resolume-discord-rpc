@@ -2,6 +2,7 @@ export { Detector, parseWindowsTasklist, parseUnixPgrep, COMMANDS, RESOLUME_PROD
 export type { Platform, RunCommand, DetectorOptions, ResolumeProductId, ResolumeProduct } from './detector';
 export { Presence, RECONNECT_DELAY_MS } from './presence';
 export type {
+  ActivityButton,
   ActivityDetails,
   ActivityPayload,
   DiscordRpcClient,
@@ -9,5 +10,13 @@ export type {
   PresenceStatus,
   PresenceOptions,
 } from './presence';
-export { CompositionWatcher } from './composition-watcher';
-export type { CompositionUpdate, CompositionWatcherOptions, FetchImpl } from './composition-watcher';
+export { CompositionWatcher, PUSH_POLL_DELAY_MS } from './composition-watcher';
+export type {
+  CompositionUpdate,
+  CompositionWatcherOptions,
+  CompositionSocket,
+  CreateWebSocket,
+  FetchImpl,
+} from './composition-watcher';
+export { PatchWatcher } from './patch-watcher';
+export type { PatchUpdate, PatchWatcherOptions } from './patch-watcher';

@@ -2,11 +2,19 @@ import { Client } from '@xhayper/discord-rpc';
 
 export const RECONNECT_DELAY_MS = 15000;
 
+export interface ActivityButton {
+  label: string;
+  url: string;
+}
+
 export interface ActivityDetails {
   details: string;
   largeImageText: string;
   largeImageKey: string;
   state?: string;
+  // Discord allows at most two buttons; they are only visible to OTHER
+  // users viewing the profile, never to the account that sets them.
+  buttons?: ActivityButton[];
 }
 
 export interface ActivityPayload extends ActivityDetails {

@@ -15,6 +15,8 @@ export interface ResolumeProduct {
   label: string;
   /** Discord Rich Presence art asset key — must be uploaded in the Developer Portal. */
   largeImageKey: string;
+  /** Product page, used for the presence "What is Resolume?" button. */
+  websiteUrl: string;
 }
 
 // Confirmed executable/bundle names via Resolume's own support docs and
@@ -22,9 +24,27 @@ export interface ResolumeProduct {
 // macupdater.net) — not verified against a real running Avenue/Wire
 // process, since neither is installed anywhere this was built.
 export const RESOLUME_PRODUCTS: ResolumeProduct[] = [
-  { id: 'arena', processName: 'Arena', label: 'Resolume Arena', largeImageKey: 'resolume_logo' },
-  { id: 'avenue', processName: 'Avenue', label: 'Resolume Avenue', largeImageKey: 'resolume_avenue_logo' },
-  { id: 'wire', processName: 'Wire', label: 'Resolume Wire', largeImageKey: 'resolume_wire_logo' },
+  {
+    id: 'arena',
+    processName: 'Arena',
+    label: 'Resolume Arena',
+    largeImageKey: 'resolume_logo',
+    websiteUrl: 'https://resolume.com/software/avenue-arena',
+  },
+  {
+    id: 'avenue',
+    processName: 'Avenue',
+    label: 'Resolume Avenue',
+    largeImageKey: 'resolume_avenue_logo',
+    websiteUrl: 'https://resolume.com/software/avenue-arena',
+  },
+  {
+    id: 'wire',
+    processName: 'Wire',
+    label: 'Resolume Wire',
+    largeImageKey: 'resolume_wire_logo',
+    websiteUrl: 'https://resolume.com/software/wire',
+  },
 ];
 
 export const COMMANDS: Record<string, string> = {
