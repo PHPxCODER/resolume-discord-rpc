@@ -47,7 +47,11 @@ jobs:
           if [ "$RUNNER_OS" = "macOS" ] && [ -n "$APPLE_ID" ]; then
             ARGS="$ARGS --config.mac.notarize=true"
           fi
-          pnpm --filter @resolume-discord-rpc/desktop build -- $ARGS
+          # pnpm's script-arg forwarding inserts a stray "--" that breaks
+          # electron-builder's flag parsing, so invoke the binary directly.
+          pnpm --filter @resolume-discord-rpc/desktop build:ts
+          pnpm --filter @resolume-discord-rpc/desktop bundle
+          pnpm --filter @resolume-discord-rpc/desktop exec electron-builder --publish never $ARGS
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
