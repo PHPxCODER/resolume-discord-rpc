@@ -18,6 +18,7 @@ import {
   setShowLiveDetails,
 } from './settings';
 import { log, logDir } from './logger';
+import { startAutoUpdates, quitAndInstall } from './updater';
 
 app.setName('Resolume Discord RPC');
 
@@ -39,13 +40,18 @@ let currentState: string | undefined;
 // on every poll forever while Resolume's webserver is off, and 'update'
 // on every BPM tick, so raw events would flood the log file.
 let liveDetailsWereAvailable = false;
+let pendingUpdateVersion: string | null = null;
+let trayLabel = 'Waiting for Resolume…';
 const detector = new Detector();
 const presence = new Presence({ clientId: DISCORD_CLIENT_ID });
 const compositionWatcher = new CompositionWatcher({ port: getRestPort() });
 const patchWatcher = new PatchWatcher({ port: getWireRestPort() });
 
 function assetPath(name: string): string {
-  return path.join(__dirname, '..', '..', 'assets', name);
+  // app.getAppPath() is the directory containing package.json both in dev
+  // and inside the packaged asar — unlike __dirname, it doesn't care
+  // whether this file runs from out/src/ (dev) or bundle/ (packaged).
+  return path.join(app.getAppPath(), 'assets', name);
 }
 
 // The "Template" filename suffix makes Electron treat these as macOS
@@ -91,6 +97,7 @@ function logAvailabilityTransition(available: boolean, source: string): void {
 }
 
 function setTrayState(label: string): void {
+  trayLabel = label;
   if (!tray) return;
   tray.setToolTip(`Resolume Discord RPC — ${label}`);
   tray.setContextMenu(
@@ -138,6 +145,9 @@ function setTrayState(label: string): void {
         click: () => shell.openExternal(GITHUB_REPO_URL),
       },
       { type: 'separator' },
+      ...(pendingUpdateVersion
+        ? [{ label: `Restart to update to v${pendingUpdateVersion}`, click: () => quitAndInstall() }]
+        : []),
       { label: 'Quit', click: () => app.quit() },
     ])
   );
@@ -206,6 +216,11 @@ app.whenReady().then(() => {
   createTray();
   applyStoredAutoStartSetting();
   detector.start();
+  startAutoUpdates((version) => {
+    log(`update v${version} downloaded, offering restart via tray`);
+    pendingUpdateVersion = version;
+    setTrayState(trayLabel); // rebuild the menu with the restart item
+  });
 });
 
 app.on('before-quit', () => {

@@ -24,6 +24,20 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Release workflow now uploads updater metadata
+  (latest*.yml, blockmaps, mac zip) and passes signing/notarization
+  secrets through — dormant until certificates exist; added `packaging/`
+  Homebrew cask + winget manifest templates with an activation checklist
+  (distribution plan, Task 3).
+- 2026-09-08: Packaged builds now ship a single esbuild bundle
+  (`bundle/main.js`, 2MB asar) instead of `out/` + all of node_modules;
+  `asar` enabled, `extraMetadata.main` switches entrypoints so dev flow is
+  untouched; `assetPath` now resolves via `app.getAppPath()` so it works
+  from both entrypoints (distribution plan, Task 2).
+- 2026-09-08: Added auto-updates via electron-updater (GitHub Releases
+  feed, checks 30s after start then every 6h, tray "Restart to update"
+  item). macOS won't apply updates until builds are signed — logged, never
+  fatal (distribution plan, Task 1).
 - 2026-09-08: Bumped both workflows to Node 22 — pnpm 11 needs Node >=
   22.13, so setup-node's `cache: pnpm` step died under Node 20.
 - 2026-09-08: Fixed CI failing at setup — `pnpm/action-setup@v4` requires a

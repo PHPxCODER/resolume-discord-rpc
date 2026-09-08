@@ -8,37 +8,49 @@
     "start": "pnpm build:ts && electron .",
     "dev": "pnpm start",
     "generate-icons": "pnpm build:ts && node out/scripts/generate-icons.js",
-    "build": "pnpm build:ts && electron-builder"
+    "bundle": "esbuild out/src/main.js --bundle --platform=node --format=cjs --external:electron --outfile=bundle/main.js",
+    "build": "pnpm build:ts && pnpm bundle && electron-builder --publish never"
   },
   "dependencies": {
-    "@resolume-discord-rpc/core": "workspace:*"
+    "@resolume-discord-rpc/core": "workspace:*",
+    "electron-updater": "^6.8.9"
   },
   "devDependencies": {
     "@types/pngjs": "^6.0.5",
     "electron": "^44.1.1",
     "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
     "pngjs": "^7.0.0",
     "sharp": "^0.35.4"
   },
   "build": {
     "appId": "com.resolume-discord-rpc.app",
     "productName": "Resolume Discord RPC",
-    "asar": false,
+    "asar": true,
     "files": [
-      "out/**/*",
+      "bundle/**/*",
       "assets/**/*",
-      "package.json",
-      "node_modules/**/*"
+      "!node_modules/**/*"
     ],
+    "extraMetadata": {
+      "main": "bundle/main.js"
+    },
     "win": {
       "target": "nsis",
       "icon": "assets/app-icon.png"
     },
     "mac": {
-      "target": "dmg",
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "icon": "assets/app-icon.png",
       "category": "public.app-category.utilities"
     },
-    "publish": null
+    "publish": {
+      "provider": "github",
+      "owner": "PHPxCODER",
+      "repo": "resolume-discord-rpc"
+    }
   }
 }

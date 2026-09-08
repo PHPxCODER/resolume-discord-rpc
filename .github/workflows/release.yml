@@ -11,9 +11,16 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact: apps/desktop/dist/*.exe
+            artifact: |
+              apps/desktop/dist/*.exe
+              apps/desktop/dist/*.blockmap
+              apps/desktop/dist/latest.yml
           - os: macos-latest
-            artifact: apps/desktop/dist/*.dmg
+            artifact: |
+              apps/desktop/dist/*.dmg
+              apps/desktop/dist/*.zip
+              apps/desktop/dist/*.blockmap
+              apps/desktop/dist/latest-mac.yml
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +32,24 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - run: pnpm generate-icons
-      - run: pnpm build
+      # electron-builder signs automatically when CSC_LINK is set and
+      # skips signing when it isn't; notarization is only requested when
+      # Apple credentials exist. With no secrets configured this step
+      # builds unsigned artifacts exactly like before.
+      - name: Build (signs/notarizes when certificate secrets exist)
+        shell: bash
+        run: |
+          ARGS=""
+          if [ "$RUNNER_OS" = "macOS" ] && [ -n "$APPLE_ID" ]; then
+            ARGS="--config.mac.notarize=true"
+          fi
+          pnpm --filter @resolume-discord-rpc/desktop build -- $ARGS
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       - uses: softprops/action-gh-release@v2
         with:
           files: ${{ matrix.artifact }}

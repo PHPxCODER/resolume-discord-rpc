@@ -24,6 +24,14 @@ Once running, look for the tray icon (system tray on Windows, menu bar on
 macOS). Right-click it (click on macOS) for "Start with system", the
 "Show live details in Discord" privacy toggle, logs, and quit.
 
+### Auto-updates
+
+The app checks GitHub Releases for updates (30s after launch, then every
+6 hours) and offers a "Restart to update" tray item when one is ready.
+**Windows** updates fully automatically. **macOS** refuses to apply
+updates to unsigned apps, so until builds are signed you'll need to
+download new macOS versions manually.
+
 ## Scope
 
 - Detects **Resolume Arena, Avenue, and Wire** and shows an

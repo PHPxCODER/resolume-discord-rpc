@@ -1,0 +1,19 @@
+# Template (singleton manifest) — fill version/URL/sha256 from a published,
+# SIGNED Windows release, then submit to microsoft/winget-pkgs under
+# manifests/p/PHPxCODER/ResolumeDiscordRPC/<version>/. See ../README.md.
+PackageIdentifier: PHPxCODER.ResolumeDiscordRPC
+PackageVersion: REPLACE_ME # e.g. 0.1.0
+PackageName: Resolume Discord RPC
+Publisher: PHPxCODER
+License: ISC
+LicenseUrl: https://github.com/PHPxCODER/resolume-discord-rpc/blob/main/README.md
+ShortDescription: Discord Rich Presence for Resolume Arena, Avenue and Wire
+PackageUrl: https://github.com/PHPxCODER/resolume-discord-rpc
+Installers:
+  - Architecture: x64
+    InstallerType: nullsoft
+    InstallerUrl: https://github.com/PHPxCODER/resolume-discord-rpc/releases/download/vREPLACE_ME/Resolume.Discord.RPC.Setup.REPLACE_ME.exe
+    InstallerSha256: REPLACE_ME # Get-FileHash <exe> -Algorithm SHA256
+PackageLocale: en-US
+ManifestType: singleton
+ManifestVersion: 1.6.0
