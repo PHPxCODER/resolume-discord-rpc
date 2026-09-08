@@ -24,6 +24,10 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Granted the release workflow `contents: write` (+
+  `actions: read` for the CI gate) — the default read-only token made
+  draft-release creation fail with "Resource not accessible by
+  integration" after the build itself finally succeeded.
 - 2026-09-08: Release workflow now waits for the tagged commit's CI run to
   succeed before building (polls via gh api, fails closed after 20 min or
   on CI failure).

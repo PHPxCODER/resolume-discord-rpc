@@ -5,6 +5,12 @@ on:
     tags:
       - 'v*'
 
+# The default workflow token is read-only; creating the draft release
+# needs contents:write, and the CI gate reads workflow runs.
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   # A tag push doesn't trigger the CI workflow itself, so gate the release
   # on the CI run of the commit being tagged: wait for it to complete and
