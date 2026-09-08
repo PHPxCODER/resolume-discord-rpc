@@ -24,6 +24,8 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Bumped both workflows to Node 22 — pnpm 11 needs Node >=
+  22.13, so setup-node's `cache: pnpm` step died under Node 20.
 - 2026-09-08: Fixed CI failing at setup — `pnpm/action-setup@v4` requires a
   pnpm version; pinned `"packageManager": "pnpm@11.18.0"` in root
   package.json (also repairs the never-yet-run release workflow, which had
