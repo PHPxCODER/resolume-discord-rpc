@@ -24,6 +24,10 @@ Instructions for Claude Code when working in this repository.
 
 <!-- newest entries at the top -->
 
+- 2026-09-08: Fixed CI failing at setup — `pnpm/action-setup@v4` requires a
+  pnpm version; pinned `"packageManager": "pnpm@11.18.0"` in root
+  package.json (also repairs the never-yet-run release workflow, which had
+  the same latent bug).
 - 2026-09-08: Added `.github/workflows/ci.yml` (lint → typecheck → test on
   pushes/PRs) and a `pnpm test` gate in `release.yml`, which previously
   built releases without running tests (presence-and-robustness plan,

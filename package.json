@@ -1,6 +1,7 @@
 {
   "name": "resolume-discord-rpc",
   "private": true,
+  "packageManager": "pnpm@11.18.0",
   "scripts": {
     "start": "pnpm --filter @resolume-discord-rpc/desktop start",
     "dev": "pnpm --filter @resolume-discord-rpc/desktop start",
