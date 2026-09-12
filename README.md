@@ -4,6 +4,8 @@ Shows "In Resolume Arena/Avenue/Wire" as your Discord Rich Presence
 activity while one of them is running. Inspired by
 [adobe-discord-rpc](https://github.com/teeteeteeteetee/adobe-discord-rpc).
 
+<img alt="image" src="https://github.com/user-attachments/assets/511fb7da-752e-44ad-bd3c-977b43b24524" />
+
 ## Install
 
 Download the latest release for your OS from the
